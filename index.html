@@ -1417,11 +1417,14 @@ function showClubDetail(club, category) {
     document.getElementById('detail-advisor').innerText = club.advisor;
     document.getElementById('detail-room').innerText = club.room;
     document.getElementById('detail-short-info').innerText = club.shortInfo;
-    document.getElementById('detail-poster').innerText = `${club.name} 포스터`;
     
     const posterBox = document.getElementById('detail-poster');
-    const timestamp = new Date().getTime(); // 현재 시간을 밀리초 단위로 가져옴
-    posterBox.innerHTML = `<img src="posters/${club.fileName}" alt="${club.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+    
+    // 💡 1. 한글 파일명 문제를 방지하기 위해 URL 인코딩을 적용합니다.
+    // 💡 2. 앞에 슬래시(/)를 빼고 상대 경로로 접근합니다.
+    const encodedFileName = encodeURIComponent(club.fileName);
+    posterBox.innerHTML = `<img src="posters/${encodedFileName}" alt="${club.name}" style="max-width:100%; max-height:100%; object-fit:contain;" onerror="this.style.display='none'; this.parentElement.innerText='이미지를 찾을 수 없습니다.';">`;
+    
     const descBorderColor = category === 'stem' ? '#0056b3' : (category === 'arts' ? '#1e7e34' : '#c71585');
     document.getElementById('detail-short-info').style.borderLeftColor = descBorderColor;
     document.getElementById('list-view').style.display = 'none';
