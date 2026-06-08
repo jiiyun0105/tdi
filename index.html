@@ -1421,7 +1421,7 @@ function showClubDetail(club, category) {
     
     const posterBox = document.getElementById('detail-poster');
     const timestamp = new Date().getTime(); // 현재 시간을 밀리초 단위로 가져옴
-    posterBox.innerHTML = `<img src="./posters/${club.fileName}" alt="${club.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+    posterBox.innerHTML = `<img src="/posters/${club.fileName}" alt="${club.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
     const descBorderColor = category === 'stem' ? '#0056b3' : (category === 'arts' ? '#1e7e34' : '#c71585');
     document.getElementById('detail-short-info').style.borderLeftColor = descBorderColor;
     document.getElementById('list-view').style.display = 'none';
