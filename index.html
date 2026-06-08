@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta property="og:title" content="동일여고 포털 - TDI">
+<meta property="og:description" content="동일여자고등학교 학생들을 위한 포털 서비스">
+<meta property="og:image" content="/mascot.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>동일여고 포털 - TDI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #11633E;
+      --green-dark: #0b4a2e;
+      --green-light: #e8f5ee;
+      --gray-bg: #F5F6FA;
+      --gray-border: #E4E6EF;
+      --gray-text: #8A94A6;
+      --dark: #1A1D2E;
+      --white: #FFFFFF;
+      --font: 'Noto Sans KR', sans-serif;
+    }
+    body { font-family: var(--font); display: flex; height: 100vh; background: var(--gray-bg); overflow: hidden; }
+
+    /* ── 사이드바 ── */
+    .sidebar { 
+      width: 210px; 
+      background: url('./leftbackground.png') no-repeat center center;
+      background-size: cover;
+      color: var(--white); 
+      display: flex; 
+      flex-direction: column; 
+      flex-shrink: 0; 
+    }
+    .sidebar-logo { padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .sidebar-logo h2 { font-size: 22px; font-weight: 700; letter-spacing: 2px; }
+    .sidebar-logo p { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+    .nav-section-label { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1px; padding: 18px 20px 6px; text-transform: uppercase; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 11px 20px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.75); cursor: pointer; border-left: 3px solid transparent; transition: all 0.18s; }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: var(--white); }
+    .nav-item.active { background: rgba(255,255,255,0.12); color: var(--white); border-left-color: #55EFC4; }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-bottom { margin-top: auto; padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; color: rgba(255,255,255,0.4); }
+
+    /* ── 메인 ── */
+    .main { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      overflow: hidden; 
+      background: url('./background.png') no-repeat center center;
+      background-size: cover;
+      padding: 20px; 
+      gap: 16px; 
+    }
+    
+    /* 좌우 정렬을 위한 바구니 스타일 */
+    .content-area {
+      display: flex;
+      flex: 1;
+      gap: 20px;
+      overflow: hidden;
+    }
+
+    /* 우측 대시보드 컨테이너 */
+    .right-dashboard {
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+    .right-dashboard::-webkit-scrollbar { display: none; }
+
+    /* 우측 카드 스타일 */
+    .right-card {
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #444;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .menu-item:hover {
+      background: var(--white);
+      transform: translateY(-1px);
+    }
+    .menu-item .arrow { color: var(--gray-text); font-size: 10px; }
+
+    .info-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.4);
+      padding: 12px;
+      border-radius: 14px;
+    }
+    .info-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+    .info-text {
+      font-size: 11px;
+      line-height: 1.5;
+      color: #555;
+    }
+
+    .guide-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .guide-list li {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 10px;
+    }
+    .guide-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--gray-text);
+    }
+    
+    .topbar { 
+      background: rgba(255, 255, 255, 0.45); 
+      backdrop-filter: blur(8px); 
+      -webkit-backdrop-filter: blur(8px); 
+      border: 1px solid rgba(255, 255, 255, 0.3); 
+      border-radius: 16px; 
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      padding: 14px 24px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      flex-shrink: 0; 
+    }
+    .topbar-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .topbar-date { font-size: 12px; color: var(--gray-text); }
+    .admin-btn { padding: 6px 14px; background: var(--green-light); color: var(--green); border: none; border-radius: 20px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .admin-btn:hover { background: #c5e8d5; }
+
+    #page-chat { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      overflow: hidden; 
+      background: rgba(255, 255, 255, 0.45); 
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+    }
+    .chat-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; overflow: hidden; }
+    .chat-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
+    .chat-header-info .name { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .chat-header { 
+      padding: 16px 24px; 
+      flex-shrink: 0; 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      background: rgba(255, 255, 255, 0.35); 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+    }
+    .chat-header-info {
+      margin-left: 20px;    
+      margin-top: 10px;     
+      margin-bottom: 10px;  
+    }
+    .chat-header-info .status { font-size: 11px; color: var(--gray-text); margin-left: 10px;display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #00B894; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .messages { 
+      flex: 1; 
+      overflow-y: auto; 
+      padding: 20px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      scroll-behavior: smooth; 
+      background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), 
+                  url('./background.png') no-repeat center center;
+      background-size: cover;
+    }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-thumb { background: var(--gray-border); border-radius: 4px; }
+
+    .msg-row { display: flex; gap: 8px; align-items: flex-end; }
+    .msg-row.user { flex-direction: row-reverse; }
+    .msg-av { width: 30px; height: 30px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; overflow: hidden; }
+    .msg-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .bubble { max-width: 110%; padding: 10px 14px; border-radius: 18px; font-size: 13px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+    .bubble.bot { background: var(--gray-bg); color: var(--dark); border-bottom-left-radius: 4px; }
+    .bubble.user { background: var(--green); color: var(--white); border-bottom-right-radius: 4px; }
+    .msg-time { font-size: 10px; color: var(--gray-text); padding: 0 4px; }
+
+    .chips { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 6px; 
+      padding: 12px 20px; 
+      flex-shrink: 0; 
+      background: rgba(255, 255, 255, 0.4); 
+      border-top: 1px solid rgba(0, 0, 0, 0.03);
+    }
+    .chip { padding: 5px 12px; border: 1.5px solid var(--gray-border); border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--green); cursor: pointer; background: var(--white); transition: all 0.15s; }
+    .chip:hover { background: var(--green); color: var(--white); border-color: var(--green); }
+
+    .input-area { 
+      padding: 0 24px 24px; 
+      border-top: none;
+      display: flex; 
+      gap: 12px; 
+      align-items: center; 
+      flex-shrink: 0; 
+      background: transparent; 
+    }
+    .input-wrap { 
+      flex: 1; 
+      background: rgba(255, 255, 255, 0.8); 
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 30px; 
+      padding: 12px 20px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+    .input-wrap input { font-size: 14px; }
+    .input-wrap:focus-within { border-color: var(--green); }
+    .input-wrap input { flex: 1; border: none; background: transparent; font-family: var(--font); font-size: 13px; color: var(--dark); outline: none; }
+    .input-wrap input::placeholder { color: var(--gray-text); }
+    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--green); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .send-btn:hover { background: var(--green-dark); }
+    .send-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .typing-bubble { background: var(--gray-bg); padding: 10px 14px; border-radius: 18px; border-bottom-left-radius: 4px; display: flex; gap: 4px; align-items: center; }
+    .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-text); animation: typing 1.2s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-5px);opacity:1} }
+
+    /* ── 급식표 페이지 ── */
+    #page-meal { flex: 1; display: none; flex-direction: column; overflow: hidden; background: var(--gray-bg); }
+    .meal-topbar { background: var(--white); padding: 14px 24px; border-bottom: 1px solid var(--gray-border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .meal-nav { display: flex; align-items: center; gap: 16px; }
+    .meal-title { font-size: 15px; font-weight: 700; color: var(--dark); }
+    .month-nav { display: flex; align-items: center; gap: 8px; }
+    .month-btn { width: 28px; height: 28px; border: 1.5px solid var(--gray-border); border-radius: 8px; background: var(--white); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+    .month-btn:hover { background: var(--gray-bg); }
+    #monthLabel { font-size: 14px; font-weight: 700; color: var(--dark); min-width: 90px; text-align: center; }
+    .edit-badge { display: none; padding: 4px 10px; background: #FFF3CD; color: #856404; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .meal-admin-btn { padding: 6px 14px; background: var(--green-light); color: var(--green); border: none; border-radius: 20px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+    .save-bar { display: none; background: var(--green); padding: 12px 24px; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .save-bar span { font-size: 13px; color: white; font-weight: 500; }
+    .save-bar-btns { display: flex; gap: 8px; }
+    .save-bar-btns button { padding: 7px 16px; border: none; border-radius: 8px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .btn-cancel { background: rgba(255,255,255,0.2); color: white; }
+    .btn-save { background: white; color: var(--green); }
+
+    /* 달력 요일 헤더 */
+    .cal-header { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 12px 16px 4px; flex-shrink: 0; }
+    .cal-day-label { text-align: center; font-size: 11px; font-weight: 700; color: var(--gray-text); padding: 4px; }
+
+    /* 달력 그리드 */
+    .cal-scroll { flex: 1; overflow-y: auto; padding: 0 16px 16px; }
+    #calendarGrid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+
+    .cal-cell { background: white; border: 1.5px solid var(--gray-border); border-radius: 12px; padding: 10px; min-height: 120px; display: flex; flex-direction: column; gap: 4px; position: relative; }
+    .cal-cell.today { background: #f0faf4; border-color: var(--green); }
+    .cal-cell.empty { background: transparent; border: none; }
+    .cal-date { font-size: 13px; font-weight: 700; color: var(--dark); }
+    .cal-cell.today .cal-date { color: var(--green); }
+    .today-tag { position: absolute; top: 8px; right: 8px; font-size: 9px; background: var(--green); color: white; padding: 1px 6px; border-radius: 10px; font-weight: 700; }
+    .meal-text { font-size: 11px; line-height: 1.6; white-space: pre-wrap; word-break: break-all; color: #444; flex: 1; }
+    .meal-text.empty { color: var(--gray-border); }
+    .meal-textarea { width: 100%; flex: 1; border: none; background: transparent; font-family: var(--font); font-size: 11px; color: #444; line-height: 1.6; resize: none; outline: none; min-height: 80px; }
+
+    /* ── 모달 공통 ── */
+    .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; }
+    .modal-bg.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; width: 420px; max-height: 85vh; overflow-y: auto; padding: 24px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .modal-header h3 { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 0; }
+    .modal-close { background: var(--gray-bg); border: none; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 16px; }
+    .m-section { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--gray-border); }
+    .m-section:last-child { border-bottom: none; margin-bottom: 0; }
+    .m-section-title { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+    .m-field { margin-bottom: 8px; }
+    .m-field label { display: block; font-size: 11px; color: var(--gray-text); margin-bottom: 4px; font-weight: 500; }
+    .m-field input, .m-field textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gray-border); border-radius: 8px; font-family: var(--font); font-size: 13px; color: var(--dark); background: var(--gray-bg); outline: none; resize: vertical; }
+    .m-field input:focus, .m-field textarea:focus { border-color: var(--green); background: var(--white); }
+    .m-btn { width: 100%; padding: 9px; background: var(--green); color: var(--white); border: none; border-radius: 8px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .m-btn:hover { background: var(--green-dark); }
+    .m-stat-row { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 16px; }
+    .m-stat { background: var(--gray-bg); border-radius: 10px; padding: 10px; text-align: center; }
+    .m-stat .num { font-size: 18px; font-weight: 700; color: var(--green); }
+    .m-stat .lbl { font-size: 10px; color: var(--gray-text); margin-top: 2px; }
+    .api-box { background: var(--green-light); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+    .api-box p { font-size: 11px; color: var(--green-dark); margin-bottom: 6px; font-weight: 500; }
+    .api-box input { width: 100%; padding: 7px 10px; border: 1.5px solid #b2dbc8; border-radius: 6px; font-size: 12px; font-family: var(--font); background: var(--white); outline: none; color: var(--dark); }
+
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(10px); background: var(--dark); color: var(--white); padding: 9px 18px; border-radius: 20px; font-size: 12px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+    /* ── 동아리 목록표 스타일 ── */
+    .category-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .category-box { background-color: white; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .category-title { text-align: center; font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+    .club-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+    .club-item { padding: 15px 5px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; font-weight: 600; border: 1px solid transparent; word-break: keep-all; }
+    .club-item:hover { transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+    .stem-title { color: #0056b3; border-bottom-color: #cce5ff; }
+    .stem-btn { background-color: #e6f2ff; border-color: #b8daff; color: #004085; }
+    .stem-btn:hover { background-color: #cce5ff; }
+
+    .arts-title { color: #1e7e34; border-bottom-color: #d4edda; }
+    .arts-btn { background-color: #e6ffe6; border-color: #c3e6cb; color: #155724; }
+    .arts-btn:hover { background-color: #d4edda; }
+
+    .humanities-title { color: #c71585; border-bottom-color: #f8d7da; }
+    .humanities-btn { background-color: #fff0f5; border-color: #f5c6cb; color: #721c24; }
+    .humanities-btn:hover { background-color: #f8d7da; }
+
+    #list-view { width: 100%; }
+    #detail-view { display: none; width: 100%; max-width: 500px; margin: 0 auto; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .back-btn { background-color: #f1f1f1; color: #333; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
+    .info-box { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; font-size: 0.95rem; color: #555; line-height: 1.6; }
+    .info-box span { font-weight: bold; color: #222; }
+    .short-desc { font-size: 1.1rem; color: #111; margin-bottom: 25px; line-height: 1.5; padding-left: 8px; border-left: 4px solid #aaa; }
+    .poster-box { width: 100%; height: 400px; background-color: #e9ecef; display: flex; align-items: center; justify-content: center; color: #888; border-radius: 8px; font-size: 1.2rem; }
+    
+    /* ── 교무실 배치도 스타일 ── */
+    .floor-section { max-width: 900px; margin: 0 auto 50px auto; background-color: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .floor-section h2 { font-size: 1.5rem; color: #222; margin-top: 0; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+    .image-box { width: 100%; background-color: #e9ecef; border-radius: 8px; text-align: center; padding: 20px 0; }
+    .image-box img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+    
+    /* 사이드바 알림 배지 */
+    .nav-badge { position: absolute; right: 14px; background: #e74c3c; color: white; font-size: 10px; font-weight: 700; border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+
+    /* 챗봇 내 질문 남기기 버튼 */
+    .ask-btn-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+    .leave-q-btn { padding: 5px 12px; background: #fff8e1; border: 1.5px solid #f0c040; border-radius: 20px; font-size: 11px; font-weight: 700; color: #b8860b; cursor: pointer; transition: all 0.15s; }
+    .leave-q-btn:hover { background: #f0c040; color: white; }
+
+    /* Q&A 전용 레이아웃 */
+    #page-qna { flex: 1; display: none; flex-direction: column; overflow: hidden; background: rgba(255,255,255,0.45); backdrop-filter: blur(16px); border-radius: 24px; border: 1px solid rgba(255,255,255,0.3); }
+    .qna-header { padding: 18px 24px; background: rgba(255,255,255,0.5); border-bottom: 1px solid rgba(255,255,255,0.3); border-radius: 24px 24px 0 0; flex-shrink: 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .qna-header h2 { font-size: 15px; font-weight: 700; color: var(--dark); }
+    .qna-header p { font-size: 11px; color: var(--gray-text); margin-top: 3px; }
+    #qnaAdminToggleBtn { padding:6px 14px; background:var(--green-light); color:var(--green); border:none; border-radius:20px; font-family:var(--font); font-size:12px; font-weight:700; cursor:pointer; flex-shrink:0; margin-left:12px; }
+    .qna-body { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .q-card { background: white; border: 1.5px solid var(--gray-border); border-radius: 16px; padding: 16px; transition: box-shadow 0.2s; }
+    .q-card.answered { border-color: #b2dbc8; }
+    .q-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .q-meta { font-size: 10px; color: var(--gray-text); }
+    .q-status { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+    .q-status.waiting { background: #fff3cd; color: #856404; }
+    .q-status.answered { background: var(--green-light); color: var(--green); }
+    .q-text { font-size: 13px; color: var(--dark); line-height: 1.5; font-weight: 500; }
+    .q-answer { margin-top: 10px; padding: 10px 12px; background: var(--green-light); border-radius: 10px; font-size: 12px; color: #2d6a4f; line-height: 1.5; }
+    .q-answer-label { font-size: 10px; font-weight: 700; color: var(--green); margin-bottom: 4px; }
+    .q-admin-answer { margin-top: 10px; display: none; }
+    .q-admin-answer textarea { width: 100%; padding: 8px 10px; border: 1.5px solid var(--gray-border); border-radius: 8px; font-family: var(--font); font-size: 12px; color: var(--dark); resize: none; outline: none; line-height: 1.5; }
+    .q-admin-btns { display: flex; gap: 6px; margin-top: 6px; }
+    .q-admin-submit { padding: 6px 14px; background: var(--green); color: white; border: none; border-radius: 8px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .q-admin-delete { padding: 6px 14px; background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; font-family: var(--font); font-size: 12px; font-weight: 700; cursor: pointer; }
+    .qna-input-area { padding: 16px 24px; border-top: 1px solid rgba(0,0,0,0.05); flex-shrink: 0; background: rgba(255,255,255,0.4); border-radius: 0 0 24px 24px; }
+    .qna-input-area textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--gray-border); border-radius: 12px; font-family: var(--font); font-size: 13px; color: var(--dark); resize: none; outline: none; line-height: 1.5; background: white; }
+    .qna-submit-btn { padding: 8px 20px; background: var(--green); color: white; border: none; border-radius: 20px; font-family: var(--font); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .qna-empty { text-align: center; padding: 40px; color: var(--gray-text); font-size: 13px; }
+
+    /* 관리자 모달 내 지식베이스 리스트 */
+    .kb-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+    .kb-item { display: flex; align-items: flex-start; gap: 8px; background: var(--gray-bg); border-radius: 10px; padding: 10px 12px; }
+    .kb-item-text { flex: 1; font-size: 12px; color: var(--dark); line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    .kb-item-del { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 14px; flex-shrink: 0; padding: 0 2px; }
+    .kb-hint { font-size: 11px; color: var(--gray-text); margin-bottom: 8px; line-height: 1.5; }
+    
+    /* ════════════════════ 모바일 전용 반응형 스타일 ════════════════════ */
+    @media (max-width: 768px) {
+      body { position: relative; }
+      .mobile-menu-btn { display: block !important; font-size: 24px; background: none; border: none; color: var(--dark); cursor: pointer; margin-right: 10px; }
+      .sidebar { position: fixed; top: 0; left: -210px; height: 100vh; z-index: 999; transition: left 0.3s ease; box-shadow: 5px 0 15px rgba(0,0,0,0.1); }
+      .sidebar.open { left: 0; }
+      .main { padding: 12px; width: 100%; }
+      .right-dashboard { display: none !important; }
+      .category-columns { grid-template-columns: 1fr !important; gap: 16px; }
+    }
+
+    .mobile-menu-btn { display: none; } /* PC에서는 숨김 */
+
+    /* ── 선택과목 전용 스타일 ── */
+    .tab-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+    .tab-btn { padding: 12px 30px; font-size: 1.1rem; font-weight: bold; color: #555; background-color: #e9ecef; border: none; border-radius: 30px; cursor: pointer; transition: all 0.2s; }
+    .tab-btn:hover { background-color: #d1d5db; }
+    .tab-btn.active { background-color: #4a90e2; color: white; box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3); }
+    #btn-hub.active { background-color: #8b5cf6; box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3); }
+
+    .grade-content { display: none; max-width: 1100px; margin: 0 auto; }
+    .grade-content.active { display: block; }
+
+    .semester-title { font-size: 1.8rem; color: #111; margin-top: 50px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #333; }
+    .category-title { font-size: 1.3rem; color: #444; margin-top: 30px; margin-bottom: 15px; }
+   /* 기존 코드를 지우고 아래 내용으로 변경하세요 */
+.subject-grid { 
+  display: grid; 
+  /* 💡 핵심: 무조건 가로로 동일한 비율의 4칸(1fr씩 4개) 분할 */
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 15px; 
+}
+
+    .subject-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; border-top: 5px solid #ccc; display: flex; flex-direction: column; text-align: left; }
+    .subject-card:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+
+    .common-card { border-top-color: #3b82f6; } 
+    .career-card { border-top-color: #10b981; } 
+    .elective-card { border-top-color: #f59e0b; } 
+    .hub-card { border-top-color: #8b5cf6; } 
+
+    .subject-type { font-size: 0.75rem; font-weight: bold; color: #666; background-color: #f1f3f5; padding: 4px 8px; border-radius: 4px; align-self: flex-start; margin-bottom: 10px; }
+    .hub-type { color: #6d28d9; background-color: #ede9fe; }
+
+    .subject-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 8px 0; color: #111; }
+    .subject-desc { font-size: 0.9rem; color: #555; line-height: 1.4; margin: 0 0 15px 0; flex-grow: 1; }
+    .subject-info-box { background-color: #f8f9fa; border-radius: 8px; padding: 10px; font-size: 0.8rem; color: #444; display: flex; flex-direction: column; gap: 5px; }
+    .info-row { display: flex; align-items: flex-start; gap: 6px; justify-content: flex-start; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h2>TDI</h2>
+    <p>동일여고 포털</p>
+  </div>
+  <div class="nav-section-label">메뉴</div>
+  <div class="nav-item active" id="nav-chat" onclick="showPage('chat')"><span class="icon">💬</span> 챗봇</div>
+  <div class="nav-item" id="nav-meal" onclick="showPage('meal')"><span class="icon">🍱</span> 급식표</div>
+  <div class="nav-item" id="nav-qna" onclick="showPage('qna')"><span class="icon">❓</span> 질문 남기기 <span class="nav-badge" id="qnaBadge" style="display:none">0</span></div>
+  <div class="nav-item" id="nav-office" onclick="showPage('office')"><span class="icon">👩‍🏫</span> 교무실 배치도</div>
+  <div class="nav-item" id="nav-club" onclick="showPage('club')"><span class="icon">🏫</span> 동아리</div>
+  <div class="nav-item" id="nav-subject" onclick="showPage('subject')"><span class="icon">📚</span> 선택과목</div>
+  <div class="sidebar-bottom">동일여자고등학교 © 2026</div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-title" id="topbarTitle">🏫 동일여고 챗봇</div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="topDate"></div>
+      <button class="admin-btn" onclick="openAdmin()">⚙️ 관리자</button>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div id="page-chat">
+      <div class="chat-header">
+        <div class="chat-avatar">
+          <img id="avatarImg" src="" alt="프로필" />
+          <span id="avatarEmoji">🏫</span>
+        </div>
+        <div class="chat-header-info">
+          <div class="name">동일여고 챗봇</div>
+          <div class="status"><div class="status-dot"></div> 온라인</div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages">
+        <div class="msg-row">
+          <div class="msg-av"><span>🏫</span></div>
+          <div>
+            <div class="bubble bot">안녕하세요! 동일여고 챗봇이에요 😊<br>급식, 시험 일정, 선생님 정보 등 뭐든 물어보세요!</div>
+            <div class="msg-time" id="welcomeTime"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chips">
+        <div class="chip" onclick="ask('오늘 급식 알려줘')">🍱 오늘 급식</div>
+        <div class="chip" onclick="ask('내일 급식 알려줘')">📅 내일 급식</div>
+        <div class="chip" onclick="ask('다음 시험 언제야?')">📝 시험 일정</div>
+        <div class="chip" onclick="ask('선생님 정보 알려줘')">👩‍🏫 선생님</div>
+      </div>
+
+      <div class="input-area">
+        <div class="input-wrap">
+          <input type="text" id="chatInput" placeholder="질문을 입력하세요..." onkeydown="if(event.key==='Enter')sendMsg()" />
+        </div>
+        <button class="send-btn" onclick="sendMsg()">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="page-meal">
+      <div class="meal-topbar">
+        <div class="meal-nav">
+          <div class="meal-title">🍱 급식표</div>
+          <div class="month-nav">
+            <button class="month-btn" onclick="changeMonth(-1)">‹</button>
+            <div id="monthLabel"></div>
+            <button class="month-btn" onclick="changeMonth(1)">›</button>
+          </div>
+          <div class="edit-badge" id="editBadge">✏️ 편집 모드</div>
+        </div>
+        <button class="meal-admin-btn" id="mealAdminBtn" onclick="handleMealAdmin()">🔐 관리자</button>
+      </div>
+
+      <div class="save-bar" id="saveBar">
+        <span>변경사항이 있어요. 저장할까요?</span>
+        <div class="save-bar-btns">
+          <button class="btn-cancel" onclick="cancelMealEdit()">취소</button>
+          <button class="btn-save" onclick="saveMealAll()">💾 저장하기</button>
+        </div>
+      </div>
+
+      <div class="cal-header">
+        <div class="cal-day-label">월</div>
+        <div class="cal-day-label">화</div>
+        <div class="cal-day-label">수</div>
+        <div class="cal-day-label">목</div>
+        <div class="cal-day-label">금</div>
+      </div>
+
+      <div class="cal-scroll">
+        <div id="calendarGrid"></div>
+      </div>
+    </div>
+
+    <div id="page-qna">
+      <div class="qna-header">
+        <div>
+          <h2>❓ 질문 남기기</h2>
+          <p>챗봇이 모르는 내용은 여기에 질문을 남겨주세요. 선생님이 직접 답변해드려요!</p>
+        </div>
+        <button id="qnaAdminToggleBtn" onclick="toggleQnaAdmin()">🔐 관리자</button>
+      </div>
+      <div class="qna-body" id="qnaBody">
+        <div class="qna-empty" id="qnaEmpty">아직 남겨진 질문이 없어요 🌿</div>
+      </div>
+      <div class="qna-input-area">
+        <textarea id="qnaInput" rows="2" placeholder="궁금한 점을 남겨주세요..."></textarea>
+        <div class="qna-submit-row" style="margin-top:8px;">
+          <button class="qna-submit-btn" onclick="submitQuestion()">질문 남기기 ✉️</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-club" style="flex: 1; display: none; flex-direction: column; overflow-y: auto; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px;">
+        <div id="list-view">
+            <h1 style="text-align: center; color: #333; margin-bottom: 30px;">🏫 학교 동아리 전체 목록</h1>
+            <div class="category-columns">
+                <div class="category-box">
+                    <h2 class="category-title stem-title">🔬 이공계열 (12)</h2>
+                    <div id="stem-list" class="club-grid"></div>
+                </div>
+                <div class="category-box">
+                    <h2 class="category-title arts-title">🎨 예체능/기타 (7)</h2>
+                    <div id="arts-list" class="club-grid"></div>
+                </div>
+                <div class="category-box">
+                    <h2 class="category-title humanities-title">📖 문과계열 (21)</h2>
+                    <div id="humanities-list" class="club-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="detail-view">
+            <button class="back-btn" onclick="showList()">🔙 전체 목록으로</button>
+            <h1 id="detail-name" style="margin-top: 0;">동아리 이름</h1>
+            <div class="info-box">
+                👨‍🏫 지도교사 : <span id="detail-advisor">선생님 이름</span><br>
+                📍 활동 교실 : <span id="detail-room">어느 교실</span>
+            </div>
+            <div class="short-desc" id="detail-short-info">한 줄 설명</div>
+            <div class="poster-box" id="detail-poster">포스터 영역</div>
+        </div>
+    </div>
+
+    <div id="page-office" style="flex: 1; display: none; flex-direction: column; overflow-y: auto; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.3); padding: 20px;">
+        <h1 style="text-align: center; font-size: 2rem; margin-bottom: 40px; color: #333;">🏫 교무실 배치도</h1>
+        <div class="floor-section">
+            <h2>1층</h2>
+            <div class="image-box"><img src="./1floor.png" alt="1층 교무실 배치도"></div>
+        </div>
+        <div class="floor-section">
+            <h2>2층</h2>
+            <div class="image-box"><img src="./2floor.png" alt="2층 교무실 배치도"></div>
+        </div>
+    </div>
+
+    <div id="page-subject" style="flex: 1; display: none; flex-direction: column; overflow-y: auto; background: rgba(255, 255, 255, 0.45); backdrop-filter: blur(16px); border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.3); padding: 30px;">
+        <h1 style="text-align: center; font-size: 2rem; margin-bottom: 30px; color: #333;">📚 학년별 선택과목 안내</h1>
+        <div class="tab-container">
+            <button class="tab-btn active" id="btn-grade2" onclick="showGrade('grade2')">2학년</button>
+            <button class="tab-btn" id="btn-grade3" onclick="showGrade('grade3')">3학년</button>
+            <button class="tab-btn" id="btn-hub" onclick="showGrade('hub')">거점학교</button>
+        </div>
+
+        <div id="grade2" class="grade-content active">
+            <h2 class="semester-title">📅 2학년 1학기</h2>
+            <h3 class="category-title">📘 공통과목 (5개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">문학</h4><p class="subject-desc">문학 작품에 대한 이해</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가 - 중간 30%, 기말 30%, 수행 40%</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">대수</h4><p class="subject-desc">지수함수, 로그함수, 삼각함수, 수열 등</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말 30%, 수행 40%</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">영어 I</h4><p class="subject-desc">부교재: 수능특강</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b>상대평가, 중간 30%, 기말 30%, 수행 40%</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">화학</h4><p class="subject-desc">몰농도, 화학평형, 화학반응식</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말 30%, 수행40%</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">법과 사회</h4><p class="subject-desc">법 체계에 대한 이해</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간 30%, 기말30%, 수행 40%</span></div></div></div>
+            </div>
+            <h3 class="category-title">📗 진로선택 (7개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">기하</h4><p class="subject-desc">이차곡선, 공간도형, 벡터 </p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 76명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 입력:상대평가, 중간30%, 기말30%, 수행 40%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">지구과학</h4><p class="subject-desc">고체지구, 유체지구, 천체</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 30명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간25%, 기말25%, 수행 50%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">현대 사회와 윤리</h4><p class="subject-desc">철학자의 가치관, 현대 사회의 갈등 양상</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 88명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말30%, 수행 40%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">세계 시민과 지리</h4><p class="subject-desc">세계의 지리적 환경과 경제, 정치, 문화적 상호관계</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 20명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말30%, 수행 40%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">생물의 유전</h4><p class="subject-desc">DNA 구조, 복제, 유전</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 63명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말30%, 수행 40%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">세계문화와 영어</h4><p class="subject-desc">국가의 다양한 문화적 특성을 영어 텍스트로 배움</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 27명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간30%, 기말30%, 수행 40%</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">일본어</h4><p class="subject-desc">히라가나, 가타카나, 기초 문법</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 82명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 상대평가, 중간20%, 기말20%, 수행 60%</span></div></div></div>
+            </div>
+
+            <h2 class="semester-title" style="margin-top: 80px;">📅 2학년 2학기</h2>
+            <h3 class="category-title">📘 공통과목 (5개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">독서와 작문</h4><p class="subject-desc">비문학 지문 구조와 작문 기초</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">미적분</h4><p class="subject-desc">극한, 미분, 적분</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">영어2</h4><p class="subject-desc">부교재: 수능특강</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">생명과학</h4><p class="subject-desc">물질의 생리 현상 탐구</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">사회문화</h4><p class="subject-desc">세계의 다양한 정치, 경제, 문화 탐구</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+            </div>
+            <h3 class="category-title">📗 진로선택 (6개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">문학과 영상</h4><p class="subject-desc">문학 작품의 서사 구조, 영상매체</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 32명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">세계사</h4><p class="subject-desc">세계의 시대별 중요 사건, 문명 간 갈등</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 47명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">인문학과 윤리</h4><p class="subject-desc">동서양 고전 철학 주요 사상</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 56명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">물리학</h4><p class="subject-desc">고전 역학, 전자기 현상, 파동</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 68명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">화학 반응의 세계</h4><p class="subject-desc">화학 반응 심화</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 83명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">일본어 회화</h4><p class="subject-desc">일본어 일상 회화 심화</p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 44명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+            </div>
+        </div>
+
+        <div id="grade3" class="grade-content">
+            <h2 class="semester-title">📅 3학년 1학기</h2>
+            <h3 class="category-title">📘 공통과목 (3개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">화법과 언어</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">확률과 통계</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card common-card"><div class="subject-type">공통과목</div><h4 class="subject-title">영어 독해와 작문</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 193명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+            </div>
+            <h3 class="category-title">📗 진로선택 (15개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">주제탐구독서</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 71명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">미적분2</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 91명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">미디어 영어</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 38명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">경제</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 52명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">동아시아 역사 기행</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 38명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">윤리와 사상</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 96명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">한국지리탐구</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 37명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">물질과 에너지</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 83명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">세포와 물질대사</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 96명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">전자기와 양자</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 41명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">심화 일본어</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 45명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">중국 문화</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 41명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">인간과 철학</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 181명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">인공지능 일반</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 65명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">미술과 매체</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 86명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card career-card"><div class="subject-type">진로선택</div><h4 class="subject-title">음악과 미디어</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 109명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+            </div>
+
+            <h2 class="semester-title" style="margin-top: 80px;">📅 3학년 2학기</h2>
+            <h3 class="category-title">📙 선택과목 (13개)</h3>
+            <div class="subject-grid">
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">매체 의사소통</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 67명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">심화 영어 독서와 작문</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 33명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">기후 변화와 지속 가능한 세계</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 39명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">사회문제탐구</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 136명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">역사로 탐구하는 현대세계</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 28명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">윤리문제탐구</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 66명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">기후 변화와 환경 생태</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 60명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">융합과학탐구</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 126명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">소프트웨어와 생활</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 64명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">일본 문화</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 80명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">빅데이터분석</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 72명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">미술감상과 비평</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 94명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+                <div class="subject-card elective-card"><div class="subject-type">선택과목</div><h4 class="subject-title">음악 감상과 비평</h4><p class="subject-desc"></p><div class="subject-info-box"><div class="info-row"><span>👥</span> <span><b>수강자 수:</b> 101명(예정)</span></div><div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 미정</span></div></div></div>
+            </div>
+        </div>
+
+        <div id="hub" class="grade-content">
+            <h2 class="semester-title">🏫 거점학교 공동교육과정</h2>
+            <div class="subject-grid">
+                <div class="subject-card hub-card">
+                    <div class="subject-type hub-type">거점학교</div>
+                    <h4 class="subject-title">데이터 과학</h4>
+                    <p class="subject-desc">데이터 수집, 분석 및 시각화 방법을 배우고 실생활 문제를 해결해보는 과목입니다.</p>
+                    <div class="subject-info-box">
+                        <div class="info-row"><span>👥</span> <span><b>수강 정원:</b> 20명</span></div>
+                        <div class="info-row"><span>📝</span> <span><b>평가 방식:</b> 절대평가, 수행평가 100%</span></div>
+                        <div class="info-row"><span>🕒</span> <span><b>수업 시간:</b> 토요일 08:20 ~ 12:20</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right-dashboard">
+      <div class="right-card">
+        <div class="card-title">🌼 자주 찾는 메뉴</div>
+        <div class="menu-list">
+          <div class="menu-item" onclick="ask('오늘 급식 알려줘')"><span>🍱 오늘 급식</span><span class="arrow">❯</span></div>
+          <div class="menu-item" onclick="ask('내일 급식 알려줘')"><span>📅 내일 급식</span><span class="arrow">❯</span></div>
+          <div class="menu-item" onclick="ask('다음 시험 언제야?')"><span>📝 시험 일정</span><span class="arrow">❯</span></div>
+          <div class="menu-item" onclick="ask('선생님 정보 알려줘')"><span>👩‍🏫 선생님 정보</span><span class="arrow">❯</span></div>
+        </div>
+      </div>
+
+      <div class="right-card">
+        <div class="card-title">🌱 알려드려요</div>
+        <div class="info-box">
+          <img class="info-img" src="./mascot.png" alt="마스코트" onerror="this.style.display='none'">
+          <div class="info-text">궁금한 것이 있다면 언제든지 물어봐 주세요!<br>제가 친절하게 알려줄게요 🌱</div>
+        </div>
+      </div>
+
+      <div class="right-card">
+        <div class="card-title">🌾 이용 안내</div>
+        <ul class="guide-list">
+          <li>급식표는 매일 08:00에 업데이트돼요.</li>
+          <li>시험 일정은 변경될 수 있어요.</li>
+          <li>정확한 정보는 선생님께 확인해주세요.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg" onclick="if(event.target===this)closeAdmin()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>⚙️ 관리자 설정</h3>
+      <button class="modal-close" onclick="closeAdmin()">✕</button>
+    </div>
+
+    <div class="m-stat-row">
+      <div class="m-stat"><div class="num" id="cntT">0</div><div class="lbl">선생님</div></div>
+      <div class="m-stat"><div class="num" id="cntE">0</div><div class="lbl">시험일정</div></div>
+      <div class="m-stat"><div class="num" id="cntQ">0</div><div class="lbl">미답변 질문</div></div>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-title">🔑 Claude AI 키</div>
+      <div class="api-box">
+        <p>API 키를 입력하면 AI가 자연스럽게 대화해요.</p>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-..." />
+      </div>
+      <button class="m-btn" onclick="saveApiKey()">API 키 저장</button>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-title">📖 학교 정보 (지식베이스)</div>
+      <p class="kb-hint">챗봇이 참고할 학교 정보를 자유롭게 입력하세요.</p>
+      <div class="kb-list" id="kbList"></div>
+      <div class="m-field">
+        <textarea id="kbInput" rows="3" placeholder="예: 도서관 운영시간은 오전 8시 ~ 오후 6시입니다."></textarea>
+      </div>
+      <button class="m-btn" onclick="saveKb()">➕ 정보 추가</button>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-title">👩‍🏫 선생님 정보</div>
+      <div id="teacherList" style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;"></div>
+      <div class="m-field"><label>이름</label><input id="tName" placeholder="예: 김민지" /></div>
+      <div class="m-field"><label>과목 / 담당</label><input id="tSubject" placeholder="예: 수학 / 1학년 3반 담임" /></div>
+      <div class="m-field"><label>연락처</label><input id="tContact" placeholder="예: 내선 203" /></div>
+      <button class="m-btn" onclick="saveTeacher()">선생님 추가</button>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-title">📝 시험 일정</div>
+      <div id="examList" style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;"></div>
+      <div class="m-field"><label>시험 이름</label><input id="eName" placeholder="예: 1학기 기말고사" /></div>
+      <div class="m-field"><label>날짜</label><input id="eDate" placeholder="예: 6월 18일 ~ 6월 20일" /></div>
+      <div class="m-field"><label>범위 / 메모</label><textarea id="eNote" rows="2" placeholder="예: 수학 1~4단원"></textarea></div>
+      <button class="m-btn" onclick="saveExam()">시험 일정 추가</button>
+    </div>
+
+    <div class="m-section">
+      <div class="m-section-title">❓ 학생 질문 관리</div>
+      <p class="kb-hint">학생들이 남긴 질문에 답변하면 챗봇이 유사 질문에도 활용해요.</p>
+      <div id="adminQnaList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="qnaPwModalBg" onclick="if(event.target===this)closeQnaPwModal()">
+  <div class="modal" style="max-width:320px;">
+    <div class="modal-header"><h3>🔐 관리자 확인</h3></div>
+    <p style="font-size:12px;color:var(--gray-text);margin-bottom:16px;">비밀번호를 입력하면 질문에 답변할 수 있어요.</p>
+    <div class="m-field">
+      <input type="password" id="qnaPwInput" placeholder="비밀번호 입력..." onkeydown="if(event.key==='Enter')confirmQnaPw()" style="width:100%;padding:8px 10px;border:1.5px solid var(--gray-border);border-radius:8px;outline:none;margin-bottom:6px;" />
+    </div>
+    <div id="qnaPwError" style="display:none;font-size:12px;color:#dc3545;margin-bottom:10px;">비밀번호가 틀렸어요 😅</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeQnaPwModal()" style="flex:1;padding:10px;background:var(--gray-bg);color:var(--gray-text);border:none;border-radius:10px;font-weight:700;cursor:pointer;">취소</button>
+      <button onclick="confirmQnaPw()" style="flex:1;padding:10px;background:var(--green);color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;">확인</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="adminPwModalBg" onclick="if(event.target===this)closeAdminPwModal()">
+  <div class="modal" style="max-width:320px;">
+    <div class="modal-header"><h3>🔐 관리자 확인</h3></div>
+    <p style="font-size:12px;color:var(--gray-text);margin-bottom:16px;">비밀번호를 입력하면 관리자 설정을 열 수 있어요.</p>
+    <div class="m-field">
+      <input type="password" id="adminPwInput" placeholder="비밀번호 입력..." onkeydown="if(event.key==='Enter')confirmAdminPw()" style="width:100%;padding:8px 10px;border:1.5px solid var(--gray-border);border-radius:8px;outline:none;margin-bottom:6px;" />
+    </div>
+    <div id="adminPwError" style="display:none;font-size:12px;color:#dc3545;margin-bottom:10px;">비밀번호가 틀렸어요 😅</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="closeAdminPwModal()" style="flex:1;padding:10px;background:var(--gray-bg);color:var(--gray-text);border:none;border-radius:10px;font-weight:700;cursor:pointer;">취소</button>
+      <button onclick="confirmAdminPw()" style="flex:1;padding:10px;background:var(--green);color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;">확인</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { db } from "./firebase.js"; 
+import { doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// 글로벌 실시간 상태판 구조 정의
+let state = {
+  teachers: [],
+  exams: [],
+  kb: [],
+  qna: [],
+  apiKey: '',
+  profile: ''
+};
+
+const ADMIN_PW = '9385';
+let mealYear  = new Date().getFullYear();
+let mealMonth = new Date().getMonth();
+let isMealEdit = false;
+let mealData = {}; 
+let mealTemp = {};
+let qnaAdminUnlocked = false;
+
+// 💻 상단부 렌더러 카운터 디버깅 활성화
+function updateCounts() {
+  document.getElementById('cntT').textContent = state.teachers.length;
+  document.getElementById('cntE').textContent = state.exams.length;
+  document.getElementById('cntQ').textContent = state.qna.filter(q => !q.answer).length;
+}
+
+function updateQnaBadge() {
+  const n = state.qna.filter(q => !q.answer).length;
+  const badge = document.getElementById('qnaBadge');
+  if (badge) { 
+    badge.textContent = n; 
+    badge.style.display = n > 0 ? 'inline-block' : 'none'; 
+  }
+}
+
+// 🌐 데이터베이스 실시간 카메라 작동 연동
+window.onload = () => {
+  const now = new Date();
+  document.getElementById('welcomeTime').textContent = fmtTime(now);
+  document.getElementById('topDate').textContent = now.toLocaleDateString('ko-KR', {year:'numeric',month:'long',day:'numeric',weekday:'short'});
+  
+  onSnapshot(doc(db, "schoolPortal", "mainData"), (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      state.teachers = data.teachers || [];
+      state.exams = data.exams || [];
+      state.kb = data.kb || [];
+      state.qna = data.qna || [];
+    }
+    updateCounts();
+    updateQnaBadge();
+    renderKbList();
+    renderAdminQna();
+    renderTeacherList();
+    renderExamList();
+    renderQna();
+  });
+
+  onSnapshot(doc(db, "schoolPortal", "meals"), (docSnap) => {
+    if (docSnap.exists()) {
+      mealData = docSnap.data() || {};
+    }
+    renderCalendar();
+  });
+};
+
+function fmtTime(d) {
+  return d.toLocaleTimeString('ko-KR', {hour:'2-digit', minute:'2-digit'});
+}
+
+// 모바일 전용 토글 라우터 펑션
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.toggle('open');
+}
+
+// 메인 페이지네이션 처리 함수
+function showPage(page) {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) sidebar.classList.remove('open');
+  
+  ['chat', 'meal', 'qna', 'office', 'club', 'subject'].forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.style.display = 'none';
+    const nav = document.getElementById('nav-' + p);
+    if (nav) nav.className = 'nav-item';
+  });
+
+  const target = document.getElementById('page-' + page);
+  if (target) target.style.display = 'flex';
+  const navTarget = document.getElementById('nav-' + page);
+  if (navTarget) navTarget.className = 'nav-item active';
+
+  const titles = { chat:'🏫 동일여고 챗봇', meal:'🍱 급식표', qna:'❓ 질문 남기기', office:'🏫 교무실 배치도', club:'🏫 동아리 목록', subject:'📚 선택과목 안내' };
+  document.getElementById('topbarTitle').textContent = titles[page] || '';
+
+  if (page === 'meal') renderCalendar();
+  if (page === 'qna')  renderQna();
+  if (page === 'club') {
+    renderClubList();
+    showList();
+  }
+}
+
+function fetchMeal(offset = 0) {
+  const d = new Date(); d.setDate(d.getDate() + offset);
+  const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return mealData[key] || null;
+}
+
+// 💬 대화 모듈 엔진 데이터 흐름 처리
+function addMsg(text, role, showLeaveQ = false) {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row ' + role;
+
+  if (role === 'bot') {
+    const av = document.createElement('div');
+    av.className = 'msg-av';
+    av.innerHTML = `<span>🏫</span>`;
+    const wrap = document.createElement('div');
+    const bub = document.createElement('div');
+    bub.className = 'bubble bot'; bub.textContent = text;
+    const t = document.createElement('div');
+    t.className = 'msg-time'; t.textContent = fmtTime(new Date());
+    wrap.appendChild(bub);
+
+    if (showLeaveQ) {
+      const btnRow = document.createElement('div');
+      btnRow.className = 'ask-btn-row';
+      const btn = document.createElement('button');
+      btn.className = 'leave-q-btn';
+      btn.textContent = '✉️ 질문 남기기';
+      btn.onclick = () => showPage('qna');
+      btnRow.appendChild(btn);
+      wrap.appendChild(btnRow);
+    }
+    wrap.appendChild(t);
+    row.appendChild(av); row.appendChild(wrap);
+  } else {
+    const wrap = document.createElement('div');
+    const bub = document.createElement('div');
+    bub.className = 'bubble user'; bub.textContent = text;
+    const t = document.createElement('div');
+    t.className = 'msg-time'; t.textContent = fmtTime(new Date());
+    wrap.appendChild(bub); wrap.appendChild(t);
+    row.appendChild(wrap);
+  }
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const row = document.createElement('div');
+  row.className = 'msg-row'; row.id = 'typing';
+  const av = document.createElement('div');
+  av.className = 'msg-av'; av.innerHTML = `<span>🏫</span>`;
+  const bub = document.createElement('div');
+  bub.className = 'typing-bubble';
+  bub.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  row.appendChild(av); row.appendChild(bub);
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() { const el = document.getElementById('typing'); if (el) el.remove(); }
+
+async function sendMsg() {
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  
+  // 버튼을 누르거나 입력 창에 값이 없으면 전송 프로세스를 아예 시작하지 않음
+  if (!text) return;
+  
+  inp.value = '';
+  addMsg(text, 'user');
+  showTyping();
+
+  const lower = text.toLowerCase();
+  let reply = null;
+  let showLeaveQ = false;
+
+  // 1. 급식 관련 질문 키워드 체크 (가장 먼저 확실하게 가로채기)
+  if (lower.includes('급식') || lower.includes('밥') || lower.includes('점심')) {
+    const offset = lower.includes('내일') ? 1 : 0;
+    const label = offset ? '내일' : '오늘';
+    const meal = fetchMeal(offset); 
+    
+    reply = meal
+      ? `🍱 ${label} 동일여고 급식이에요!\n\n${meal}\n\n맛있게 드세요 😊`
+      : `${label} 급식 정보가 아직 입력되지 않았어요 😅\n급식표 탭에서 확인해보세요!`;
+  }
+
+  // 2. [순서 변경] Claude AI를 부르기 전에 시험 일정 키워드 가로채기
+  if (!reply && lower.includes('시험')) {
+    reply = state.exams.length > 0
+      ? `📝 시험 일정이에요!\n\n` + state.exams.map(e => `• ${e.name}: ${e.date}${e.note ? '\n  범위: ' + e.note : ''}`).join('\n')
+      : '📝 아직 등록된 시험 일정이 없어요.';
+  } 
+  
+  // 3. [순서 변경] Claude AI를 부르기 전에 선생님 키워드 가로채기
+  else if (!reply && lower.includes('선생님')) {
+    reply = state.teachers.length > 0
+      ? '👩‍🏫 선생님 정보예요!\n\n' + state.teachers.map(t => `• ${t.name} 선생님 (${t.subject})${t.contact ? '\n  연락처: ' + t.contact : ''}`).join('\n')
+      : '선생님 정보가 아직 등록되지 않았어요.';
+  }
+
+  // 4. 급식, 시험, 선생님 키워드가 모두 없다면 그제서야 Claude AI 호출 시도
+  if (!reply) reply = await callClaude(text);
+
+  // 5. Claude AI도 대답을 못했거나 키가 없을 때 최종 미등록 안내 처리
+  if (!reply) {
+    reply = '질문을 이해하지 못했어요 😅\n급식, 시험 일정, 선생님 관련 질문을 해보세요!\n\n질문 남기기 탭에서 질문을 남겨주시면 선생님이 직접 답변해드려요!';
+    showLeaveQ = true;
+  }
+
+  // ════════════ 💡 [지원이가 오래 고쳐 만든 핵심 스위치] 자동 매칭 검사 ════════════
+  if (!reply) {
+    showLeaveQ = true;
+  } else {
+    const textToCheck = reply.toLowerCase();
+    if (
+      textToCheck.includes("아직") ||
+      textToCheck.includes("없어요") ||
+      textToCheck.includes("등록되지") ||
+      textToCheck.includes("이해하지 못했어요") ||
+      textToCheck.includes("질문 남기기")
+    ) {
+      showLeaveQ = true;
+    }
+  }
+  // ════════════════════════════════════════════════════════════════════════
+
+  removeTyping();
+  addMsg(reply, 'bot', showLeaveQ);
+}
+
+function ask(q) { document.getElementById('chatInput').value = q; sendMsg(); }
+
+// 🚨 터치(클릭) 먹통 방지용 강제 주입 연결고리
+window.sendMsg = sendMsg;
+window.ask = ask;
+// 관리자 보안 로직 파트
+function openAdmin() {
+  document.getElementById('adminPwModalBg').classList.add('open');
+  document.getElementById('adminPwInput').value = '';
+  document.getElementById('adminPwError').style.display = 'none';
+  setTimeout(() => document.getElementById('adminPwInput').focus(), 100);
+}
+function confirmAdminPw() {
+  if (document.getElementById('adminPwInput').value === ADMIN_PW) {
+    document.getElementById('adminPwModalBg').classList.remove('open');
+    document.getElementById('modalBg').classList.add('open');
+    renderKbList(); renderAdminQna(); renderTeacherList(); renderExamList();
+  } else {
+    document.getElementById('adminPwError').style.display = 'block';
+    document.getElementById('adminPwInput').value = '';
+  }
+}
+function closeAdminPwModal() { document.getElementById('adminPwModalBg').classList.remove('open'); }
+function closeAdmin() { document.getElementById('modalBg').classList.remove('open'); updateCounts(); }
+
+// ⚡️ 파이어베이스 중앙 스토리지 동기화 모듈
+async function saveToFirebase() {
+  try {
+    await setDoc(doc(db, "schoolPortal", "mainData"), {
+      teachers: state.teachers,
+      exams: state.exams,
+      kb: state.kb,
+      qna: state.qna
+    });
+  } catch (error) {
+    console.error("파이어베이스 저장 에러:", error);
+    showToast("창고 저장에 실패했어요 규칙을 확인하세요!");
+  }
+}
+
+async function saveTeacher() {
+  const name = document.getElementById('tName').value.trim();
+  const subject = document.getElementById('tSubject').value.trim();
+  const contact = document.getElementById('tContact').value.trim();
+  if (!name || !subject) { showToast('이름과 과목을 입력해주세요!'); return; }
+  state.teachers.push({ name, subject, contact });
+  await saveToFirebase();
+  document.getElementById('tName').value = '';
+  document.getElementById('tSubject').value = '';
+  document.getElementById('tContact').value = '';
+  showToast('선생님 정보 저장 완료! ✅');
+}
+
+async function deleteTeacher(idx) {
+  if (!confirm('정말 삭제할까요?')) return;
+  state.teachers.splice(idx, 1);
+  await saveToFirebase();
+  showToast('삭제 완료!');
+}
+
+async function saveExam() {
+  const name = document.getElementById('eName').value.trim();
+  const date = document.getElementById('eDate').value.trim();
+  const note = document.getElementById('eNote').value.trim();
+  if (!name || !date) { showToast('시험 이름과 날짜를 입력해주세요!'); return; }
+  state.exams.push({ name, date, note });
+  await saveToFirebase();
+  document.getElementById('eName').value = '';
+  document.getElementById('eDate').value = '';
+  document.getElementById('eNote').value = '';
+  showToast('시험 일정 저장 완료! ✅');
+}
+
+async function deleteExam(idx) {
+  if (!confirm('정말 삭제할까요?')) return;
+  state.exams.splice(idx, 1);
+  await saveToFirebase();
+  showToast('삭제 완료!');
+}
+
+async function saveKb() {
+  const text = document.getElementById('kbInput').value.trim();
+  if (!text) { showToast('내용을 입력해주세요!'); return; }
+  state.kb.push({ text, addedAt: new Date().toISOString() });
+  await saveToFirebase();
+  document.getElementById('kbInput').value = '';
+  showToast('지식베이스 추가 완료! ✅');
+}
+
+async function deleteKb(idx) {
+  state.kb.splice(idx, 1);
+  await saveToFirebase();
+  showToast('삭제 완료!');
+}
+
+async function submitQuestion() {
+  const text = document.getElementById('qnaInput').value.trim();
+  if (!text) { showToast('질문을 입력해주세요!'); return; }
+  state.qna.unshift({ id: Date.now(), text, answer: '', createdAt: new Date().toISOString() });
+  await saveToFirebase();
+  document.getElementById('qnaInput').value = '';
+  showToast('질문 등록 완료! ✉️');
+}
+
+async function submitAnswer(id) {
+  const answerText = document.getElementById(`answerInput-${id}`)?.value?.trim();
+  if (!answerText) { showToast('답변을 입력해주세요!'); return; }
+  const q = state.qna.find(x => x.id === id);
+  if (!q) return;
+  q.answer = answerText;
+  await saveToFirebase();
+  showToast('답변 완료! ✅');
+}
+
+async function deleteQuestion(id) {
+  state.qna = state.qna.filter(q => q.id !== id);
+  await saveToFirebase();
+  showToast('삭제 완료!');
+}
+
+async function saveMealAll() {
+  Object.assign(mealData, mealTemp);
+  try {
+    await setDoc(doc(db, "schoolPortal", "meals"), mealData);
+    cancelMealEdit();
+    showToast('급식표가 전교생 화면에 업데이트 완료! ✅');
+  } catch (error) {
+    showToast('급식 저장에 실패했습니다.');
+  }
+}
+
+// 🎨 로컬 컴포넌트 렌더러 함수 모음
+function renderTeacherList() {
+  const list = document.getElementById('teacherList'); if (!list) return; list.innerHTML = '';
+  if (state.teachers.length === 0) { list.innerHTML = '<div style="font-size:12px;color:var(--gray-text);text-align:center;padding:6px 0;">등록된 선생님이 없어요.</div>'; return; }
+  state.teachers.forEach((t, i) => {
+    const item = document.createElement('div'); item.style.cssText = 'display:flex;align-items:center;gap:8px;background:var(--gray-bg);border-radius:10px;padding:8px 12px;margin-bottom:6px;';
+    item.innerHTML = `
+      <div style="flex:1;font-size:12px;color:var(--dark);"><b>${t.name}</b> 선생님 · ${t.subject}${t.contact ? ' · ' + t.contact : ''}</div>
+      <button onclick="editTeacher(${i})" style="padding:3px 8px;background:#fff3cd;color:#856404;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✏️ 수정</button>
+      <button onclick="deleteTeacher(${i})" style="padding:3px 8px;background:#fee2e2;color:#dc2626;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑️ 삭제</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function renderExamList() {
+  const list = document.getElementById('examList'); if (!list) return; list.innerHTML = '';
+  if (state.exams.length === 0) { list.innerHTML = '<div style="font-size:12px;color:var(--gray-text);text-align:center;padding:6px 0;">등록된 시험 일정이 없어요.</div>'; return; }
+  state.exams.forEach((e, i) => {
+    const item = document.createElement('div'); item.style.cssText = 'display:flex;align-items:center;gap:8px;background:var(--gray-bg);border-radius:10px;padding:8px 12px;margin-bottom:6px;';
+    item.innerHTML = `
+      <div style="flex:1;font-size:12px;color:var(--dark);"><b>${e.name}</b> · ${e.date}</div>
+      <button onclick="editExam(${i})" style="padding:3px 8px;background:#fff3cd;color:#856404;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">✏️ 수정</button>
+      <button onclick="deleteExam(${i})" style="padding:3px 8px;background:#fee2e2;color:#dc2626;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">🗑️ 삭제</button>
+    `;
+    list.appendChild(item);
+  });
+}
+
+function renderKbList() {
+  const list = document.getElementById('kbList'); if (!list) return; list.innerHTML = '';
+  if (state.kb.length === 0) { list.innerHTML = '<div style="font-size:12px;color:var(--gray-text);text-align:center;padding:8px 0;">등록된 정보가 없어요.</div>'; return; }
+  state.kb.forEach((k, i) => {
+    const item = document.createElement('div'); item.className = 'kb-item';
+    item.innerHTML = `<div class="kb-item-text">${escHtml(k.text)}</div><button class="kb-item-del" onclick="deleteKb(${i})">🗑️</button>`;
+    list.appendChild(item);
+  });
+}
+
+function renderQna() {
+  const body = document.getElementById('qnaBody'); const empty = document.getElementById('qnaEmpty'); if (!body) return;
+  Array.from(body.children).forEach(c => { if (c.id !== 'qnaEmpty') c.remove(); });
+  if (state.qna.length === 0) { if (empty) empty.style.display = 'block'; return; }
+  if (empty) empty.style.display = 'none';
+  state.qna.forEach(q => {
+    const card = document.createElement('div'); card.className = 'q-card' + (q.answer ? ' answered' : '');
+    const dateStr = new Date(q.createdAt).toLocaleDateString('ko-KR', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    let answerHtml = q.answer ? `<div class="q-answer"><div class="q-answer-label">👩‍🏫 답변</div>${escHtml(q.answer)}</div>` : '';
+    let adminHtml = qnaAdminUnlocked ? (!q.answer ? `<div class="q-admin-answer" style="display:block;"><textarea id="answerInput-${q.id}" rows="2" placeholder="답변 입력..."></textarea><div class="q-admin-btns"><button class="q-admin-submit" onclick="submitAnswer(${q.id})">답변 등록</button><button class="q-admin-delete" onclick="deleteQuestion(${q.id})">삭제</button></div></div>` : `<div class="q-admin-btns" style="margin-top:8px;"><button class="q-admin-delete" onclick="deleteQuestion(${q.id})">삭제</button></div>`) : '';
+    card.innerHTML = `<div class="q-card-top"><div class="q-meta">${dateStr}</div><div class="q-status ${q.answer ? 'answered' : 'waiting'}">${q.answer ? '✅ 답변완료' : '⏳ 대기중'}</div></div><div class="q-text">${escHtml(q.text)}</div>${answerHtml}${adminHtml}`;
+    body.appendChild(card);
+  });
+}
+
+function renderAdminQna() {
+  const list = document.getElementById('adminQnaList'); if (!list) return; list.innerHTML = '';
+  if (state.qna.length === 0) { list.innerHTML = '<div style="font-size:12px;color:var(--gray-text);padding:8px 0;">질문이 없어요.</div>'; return; }
+  state.qna.forEach(q => {
+    const card = document.createElement('div'); card.className = 'q-card' + (q.answer ? ' answered' : ''); card.style.marginBottom = '10px';
+    const dateStr = new Date(q.createdAt).toLocaleDateString('ko-KR', {month:'numeric',day:'numeric'});
+    card.innerHTML = `<div class="q-card-top"><div class="q-meta">${dateStr}</div></div><div class="q-text" style="margin-bottom:8px;">${escHtml(q.text)}</div>${q.answer ? `<div class="q-answer">${escHtml(q.answer)}</div>` : `<div style="display:flex;gap:4px;"><textarea id="adminAns-${q.id}" style="flex:1;font-size:11px;" placeholder="답변..."></textarea><button class="q-admin-submit" onclick="submitAdminAnswer(${q.id})">등록</button></div>`}`;
+    list.appendChild(card);
+  });
+}
+
+function submitAdminAnswer(id) {
+  const ans = document.getElementById(`adminAns-${id}`)?.value?.trim(); if (!ans) return;
+  const q = state.qna.find(x => x.id === id); if (!q) return; q.answer = ans; saveToFirebase(); showToast('답변 등록! ✅');
+}
+
+function toggleQnaAdmin() {
+  if (qnaAdminUnlocked) { qnaAdminUnlocked = false; document.getElementById('qnaAdminToggleBtn').textContent = '🔐 관리자'; renderQna(); return; }
+  document.getElementById('qnaPwModalBg').classList.add('open');
+}
+function confirmQnaPw() {
+  if (document.getElementById('qnaPwInput').value === ADMIN_PW) { qnaAdminUnlocked = true; document.getElementById('qnaPwModalBg').classList.remove('open'); document.getElementById('qnaAdminToggleBtn').textContent = '🔓 관리자 모드 ON'; renderQna(); }
+  else { document.getElementById('qnaPwError').style.display = 'block'; }
+}
+function closeQnaPwModal() { document.getElementById('qnaPwModalBg').classList.remove('open'); }
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+
+// 🍱 달력 및 급식 핸들러 핵심 모듈
+function changeMonth(dir) { mealMonth += dir; if (mealMonth < 0) { mealMonth = 11; mealYear--; } if (mealMonth > 11) { mealMonth = 0; mealYear++; } renderCalendar(); }
+
+function renderCalendar() {
+  const grid = document.getElementById('calendarGrid'); document.getElementById('monthLabel').textContent = `${mealYear}년 ${mealMonth + 1}월`; grid.innerHTML = '';
+  const firstDay = new Date(mealYear, mealMonth, 1).getDay(); const lastDate = new Date(mealYear, mealMonth + 1, 0).getDate(); const today = new Date();
+  const dayToMon = [6, 0, 1, 2, 3, 4, 5]; const startOffset = dayToMon[firstDay]; const cells = [];
+  for (let i = 0; i < startOffset; i++) cells.push(null);
+  for (let d = 1; d <= lastDate; d++) { const dow = new Date(mealYear, mealMonth, d).getDay(); if (dow === 0 || dow === 6) continue; cells.push(d); }
+  while (cells.length % 5 !== 0) cells.push(null);
+  cells.forEach(dateVal => {
+    const cell = document.createElement('div'); if (dateVal === null) { cell.className = 'cal-cell empty'; grid.appendChild(cell); return; }
+    const key = `${mealYear}-${String(mealMonth + 1).padStart(2, '0')}-${String(dateVal).padStart(2, '0')}`;
+    const isToday = today.getFullYear() === mealYear && today.getMonth() === mealMonth && today.getDate() === dateVal;
+    cell.className = 'cal-cell' + (isToday ? ' today' : '');
+    const numDiv = document.createElement('div'); numDiv.className = 'cal-date'; numDiv.textContent = dateVal; cell.appendChild(numDiv);
+    if (isToday) { const tag = document.createElement('div'); tag.className = 'today-tag'; tag.textContent = '오늘'; cell.appendChild(tag); }
+    const content = (isMealEdit ? mealTemp[key] : mealData[key]) || '';
+    if (isMealEdit) {
+      const ta = document.createElement('textarea'); ta.className = 'meal-textarea'; ta.placeholder = '급식 입력...'; ta.value = content;
+      ta.addEventListener('input', e => { mealTemp[key] = e.target.value; document.getElementById('saveBar').style.display = 'flex'; });
+      cell.appendChild(ta);
+    } else {
+      const div = document.createElement('div'); div.className = 'meal-text' + (content ? '' : ' empty'); div.textContent = content || '급식 정보 없음'; cell.appendChild(div);
+    }
+    grid.appendChild(cell);
+  });
+}
+
+function handleMealAdmin() { if (isMealEdit) { cancelMealEdit(); return; } openMealModal(); }
+function openMealModal() { document.getElementById('mealModalBg').classList.add('open'); setTimeout(() => document.getElementById('mealPwInput').focus(), 100); }
+function confirmMealPw() {
+  if (document.getElementById('mealPwInput').value === ADMIN_PW) { isMealEdit = true; mealTemp = { ...mealData }; document.getElementById('editBadge').style.display = 'block'; document.getElementById('mealAdminBtn').textContent = '✕ 편집 종료'; renderCalendar(); }
+}
+function cancelMealEdit() { isMealEdit = false; document.getElementById('editBadge').style.display = 'none'; document.getElementById('saveBar').style.display = 'none'; document.getElementById('mealAdminBtn').textContent = '🔐 관리자'; renderCalendar(); }
+
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+
+// 🏫 동아리 40개 스태틱 데이터셋
+const clubs = [
+    { category: 'stem', name: "건강세상연구반", advisor: "안지현", room: "2-1", shortInfo: "건강한 학교생활과 보건 상식을 탐구하는 동아리입니다.", fileName: "건강세상연구반.bmp" },
+    { category: 'stem', name: "과학시사탐구반", advisor: "조남욱", room: "3-2", shortInfo: "최신 과학 트렌드와 시사 이슈를 토론합니다.", fileName: "과학시사탐구반.jpg" },
+    { category: 'stem', name: "과학신문제작반", advisor: "성보경", room: "1-3", shortInfo: "과학 뉴스 기사를 작성하고 독창적인 신문을 만듭니다.", fileName: "과학신문제작반.jpeg" },
+    { category: 'stem', name: "과학탐구반", advisor: "이유진", room: "생명과학실", shortInfo: "다양한 주제의 기초 과학 실험을 직접 수행합니다.", fileName: "과학탐구반.jpg" },
+    { category: 'stem', name: "라이징해커즈반", advisor: "오은혜", room: "멀티1실", shortInfo: "네트워크 보안과 화이트해커 기초 알고리즘을 공부합니다.", fileName: "라이징해커즈반.jpg" },
+    { category: 'stem', name: "물리실험반", advisor: "송지현", room: "물리실", shortInfo: "역학 및 전자기학 등 물리 법칙을 실험으로 증명합니다.", fileName: "물리실험반.jpg" },
+    { category: 'stem', name: "생명과학탐구반", advisor: "전윤경", room: "지구과학실", shortInfo: "세포 관찰 및 생태계 다양성을 연구하는 반입니다.", fileName: "생명과학탐구반.jpg" },
+    { category: 'stem', name: "수학과학실험반 1반", advisor: "지영조", room: "3-1", shortInfo: "수학과 과학의 융합 실험 및 창의 융합 과제를 해결합니다.", fileName: "수학과학실험반 1반.bmp" },
+    { category: 'stem', name: "수학과학실험반 2반", advisor: "김용빈", room: "수학교과실", shortInfo: "실생활 속 수학 공식 유도와 과학적 추론을 실험합니다.", fileName: "수학과학실험반 2반.bmp" },
+    { category: 'stem', name: "우주환경공학반", advisor: "김영선", room: "2-5", shortInfo: "천문학 지식과 항공우주 기술의 기초를 탐구합니다.", fileName: "우주환경공학반.png" },
+    { category: 'stem', name: "인공지능탐구반", advisor: "이병훈", room: "AI실", shortInfo: "파이썬 코딩과 머신러닝 모델의 기본 원리를 실습합니다.", fileName: "인공지능탐구반.png" },
+    { category: 'stem', name: "캐미반", advisor: "함지윤", room: "화학실", shortInfo: "흥미로운 화학 반응 실험과 분자 구조 모형을 제작합니다.", fileName: "캐미반.png" },
+    { category: 'arts', name: "댄스반", advisor: "남지형", room: "무용실", shortInfo: "학교 축제 공연 및 창작 안무를 연습합니다.", fileName: "댄스반.jpg" },
+    { category: 'arts', name: "미술반", advisor: "한혜린", room: "미술실", shortInfo: "자유로운 회화 및 주체적인 예술 부스 디자인을 진행합니다.", fileName: "미술반.png" },
+    { category: 'arts', name: "방송반", advisor: "신지호", room: "방송실", shortInfo: "교내 아침 방송 및 미디어 장비 오퍼레이팅을 전담합니다.", fileName: "방송반.png" },
+    { category: 'arts', name: "음악동아리 하울", advisor: "정소진", room: "음악실", shortInfo: "기타, 건반 등 다양한 악기로 밴드 합주를 선보입니다.", fileName: "음악동아리 하울.jpg" },
+    { category: 'arts', name: "코어코어반", advisor: "장윤섭", room: "체육관", shortInfo: "체력 증진 및 교내 구기 스포츠 매너를 함양합니다.", fileName: "코어코어반.png" },
+    { category: 'arts', name: "편집반", advisor: "이은아", room: "2-4", shortInfo: "교지 및 학교 앨범 편집 디자인을 총괄합니다.", fileName: "편집반.jpg" },
+    { category: 'arts', name: "학술반", advisor: "이희경", room: "2-6", shortInfo: "관심 학문 분야에 대한 자유 소론을 발제합니다.", fileName: "학술반.png" },
+    { category: 'humanities', name: "경제경영연구반", advisor: "문현지", room: "1-2", shortInfo: "모의 주식 투자 및 마케팅 전략 트렌드를 분석합니다.", fileName: "경제경영연구반.jpg" },
+    { category: 'humanities', name: "도서반", advisor: "윤다솔", room: "도서관", shortInfo: "도서관 사서 업무 보조 및 독서 토론 문화를 선도합니다.", fileName: "도서반.bmp" },
+    { category: 'humanities', name: "독서반1반", advisor: "장유미", room: "1-4", shortInfo: "인문학 고전을 깊이 읽고 에세이를 작성합니다.", fileName: "독서반1반.jpg" },
+    { category: 'humanities', name: "독서반2반", advisor: "노미영", room: "1-6", shortInfo: "문학 작품을 읽고 비판적 사고력을 기르는 반입니다.", fileName: "독서반2반.jpg" },
+    { category: 'humanities', name: "독서반3반", advisor: "홍유림", room: "1-7", shortInfo: "현대 소설과 수필집 중심의 정독 활동을 전개합니다.", fileName: "독서반3반.jpg" },
+    { category: 'humanities', name: "독서반4반", advisor: "김수연", room: "1-8", shortInfo: "진로 탐색에 도움이 되는 도서를 발굴하여 토론합니다.", fileName: "독서반4반.jpg" },
+    { category: 'humanities', name: "문예창작동아리 실타래", advisor: "김혜경", room: "2-2", shortInfo: "자유 시 및 단편 소설을 창작하고 합평회를 엽니다.", fileName: "문예창작동아리 실타래.jpg" },
+    { category: 'humanities', name: "미디어콘텐츠반", advisor: "곽새별", room: "3-4", shortInfo: "유튜브 영상 기획 및 공익 광고 영상 콘텐츠를 연출합니다.", fileName: "미디어콘텐츠반.jpg" },
+    { category: 'humanities', name: "범죄심리분석반", advisor: "이우봉", room: "2-7", shortInfo: "프로파일링 기법과 역사적 범죄 케이스를 스터디합니다.", fileName: "범죄심리분석반.png" },
+    { category: 'humanities', name: "사회문화탐구반", advisor: "권현서", room: "3-8", shortInfo: "우리 사회의 현상과 문화적 변동 양상을 조사합니다.", fileName: "사회문화탐구반.bmp" },
+    { category: 'humanities', name: "솔리언또래상담반", advisor: "김미영/안정숙", room: "위클래스", shortInfo: "또래 친구들의 고민 경청 및 따뜻한 학교 분위기를 조성합니다.", fileName: "솔리언또래상담반.jpeg" },
+    { category: 'humanities', name: "영어탐구반", advisor: "현세영", room: "영어교과실", shortInfo: "영미 문학을 읽고 원어로 심층 토론을 진행합니다.", fileName: "영어탐구반.png" },
+    { category: 'humanities', name: "요리조리연구반", advisor: "지영민", room: "2-8", shortInfo: "글로벌 요리 레시피 탐구 및 식문화 분석 연구반입니다.", fileName: "요리조리연구반.png" },
+    { category: 'humanities', name: "유네스코반 1반", advisor: "안이수", room: "3-6", shortInfo: "세계 시민 공동체 의식과 인권 신장 챌린지를 기획합니다.", fileName: "유네스코 홍보지.png" },
+    { category: 'humanities', name: "유네스코반 2반", advisor: "임솔잎", room: "3-7", shortInfo: "지속 가능한 인류 발전과 환경 보호 캠페인을 실천합니다.", fileName: "유네스코 홍보지.png" },
+    { category: 'humanities', name: "인문지평반", advisor: "김정연", room: "1-5", shortInfo: "철학, 사학, 문학의 융합 지평을 넓히는 심화 동아리입니다.", fileName: "인문지평반.bmp" },
+    { category: 'humanities', name: "일본어학습연구반", advisor: "박지은", room: "세미나실", shortInfo: "일본어 기초 회화 및 애니메이션 등 대중문화를 분석합니다.", fileName: "일본어학습연구반.jpg" },
+    { category: 'humanities', name: "자유토론반", advisor: "강혜연", room: "3-5", shortInfo: "정치, 사회적 찬반 쟁점에 대해 논리적 스피치 대결을 벌입니다.", fileName: "자유토론반.png" },
+    { category: 'humanities', name: "진로과제탐구반", advisor: "이가은", room: "3-3", shortInfo: "개인별 관심 진로 트랙에 맞춰 연구 논문을 분석합니다.", fileName: "진로과제탐구반.jpg" },
+    { category: 'humanities', name: "책읽기봉사반 1반", advisor: "유연주", room: "2-3", shortInfo: "지역 아동 센터 어린이를 위한 구연동화 녹음 봉사를 합니다.", fileName: "책읽기봉사반 1반.jpg" },
+    { category: 'humanities', name: "책읽기봉사반 2반", advisor: "오민우", room: "자습실2", shortInfo: "시각 장애인을 위한 도서 오디오 레코딩 캠페인을 전개합니다.", fileName: "책읽기봉사반 2반.jpg" }
+];
+
+function renderClubList() {
+    document.getElementById('stem-list').innerHTML = '';
+    document.getElementById('arts-list').innerHTML = '';
+    document.getElementById('humanities-list').innerHTML = '';
+    clubs.forEach(club => {
+        const btn = document.createElement('div'); btn.className = `club-item ${club.category}-btn`; btn.innerText = club.name; 
+        btn.onclick = () => showClubDetail(club, club.category);
+        document.getElementById(`${club.category}-list`).appendChild(btn);
+    });
+}
+
+function showClubDetail(club, category) {
+    document.getElementById('detail-name').innerText = club.name;
+    document.getElementById('detail-advisor').innerText = club.advisor;
+    document.getElementById('detail-room').innerText = club.room;
+    document.getElementById('detail-short-info').innerText = club.shortInfo;
+    document.getElementById('detail-poster').innerText = `${club.name} 포스터`;
+    
+    const posterBox = document.getElementById('detail-poster');
+    posterBox.innerHTML = `<img src="./posters/${club.fileName}" alt="${club.name}" style="max-width:100%; max-height:100%; object-fit:contain;">`;
+    const descBorderColor = category === 'stem' ? '#0056b3' : (category === 'arts' ? '#1e7e34' : '#c71585');
+    document.getElementById('detail-short-info').style.borderLeftColor = descBorderColor;
+    document.getElementById('list-view').style.display = 'none';
+    document.getElementById('detail-view').style.display = 'block';
+}
+
+function showList() { document.getElementById('detail-view').style.display = 'none'; document.getElementById('list-view').style.display = 'block'; }
+
+function showGrade(gradeId) {
+    document.querySelectorAll('.grade-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    const targetGrade = document.getElementById(gradeId); const targetBtn = document.getElementById('btn-' + gradeId);
+    if(targetGrade) targetGrade.classList.add('active'); if(targetBtn) targetBtn.classList.add('active');
+}
+
+// ══════════ 🚨 글로벌 윈도우 인터페이스 총괄 강제 바인딩 ══════════
+window.showPage = showPage;
+window.ask = ask;
+window.sendMsg = sendMsg;
+window.toggleSidebar = toggleSidebar;
+window.changeMonth = changeMonth;
+window.handleMealAdmin = handleMealAdmin;
+window.confirmMealPw = confirmMealPw;
+window.cancelMealEdit = cancelMealEdit;
+window.saveMealAll = saveMealAll;
+window.toggleQnaAdmin = toggleQnaAdmin;
+window.confirmQnaPw = confirmQnaPw;
+window.closeQnaPwModal = closeQnaPwModal;
+window.openAdmin = openAdmin;
+window.confirmAdminPw = confirmAdminPw;
+window.closeAdminPwModal = closeAdminPwModal;
+window.closeAdmin = closeAdmin;
+window.showGrade = showGrade;
+window.showClubDetail = showClubDetail;
+window.showList = showList;
+window.saveTeacher = saveTeacher;
+window.deleteTeacher = deleteTeacher;
+window.saveExam = saveExam;
+window.deleteExam = deleteExam;
+window.saveKb = saveKb;
+window.deleteKb = deleteKb;
+window.submitQuestion = submitQuestion;
+window.submitAnswer = submitAnswer;
+window.deleteQuestion = deleteQuestion;
+
+</script>
+</body>
+</html>
